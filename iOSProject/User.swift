@@ -13,13 +13,16 @@ struct User {
     
     let uid: String
     let email: String
+    let id: String
     
     init(authData: FIRUser) {
+        id = authData.providerID
         uid = authData.uid
         email = authData.email!
     }
     
-    init(uid: String, email: String) {
+    init(id: String, uid: String, email: String) {
+        self.id = id
         self.uid = uid
         self.email = email
     }

@@ -17,8 +17,9 @@ class ListTableViewController: UITableViewController {
     
     // MARK: Properties
     let usersRef = FIRDatabase.database().reference(withPath: "online")
-    let word = FIRDatabase.database().reference(withPath: "word")
-    let meaning = FIRDatabase.database().reference(withPath: "meaning")
+    let word = FIRDatabase.database().reference(withPath: "posts")
+    let userWord = FIRDatabase.database().reference(withPath: "user-posts")
+    let meaning = FIRDatabase.database().reference(withPath: "body")
     var items: [Item] = []
     var user: User!
     var userCountBarButtonItem: UIBarButtonItem!
@@ -53,7 +54,7 @@ class ListTableViewController: UITableViewController {
         userCountBarButtonItem.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = userCountBarButtonItem
         
-        user = User(uid: "FakeId", email: "hungry@person.food")
+        user = User(id: "ASDF45GG", uid: "FakeId", email: "hungry@person.food")
         
         word.queryOrdered(byChild: "completed").observe(.value, with: { snapshot in
             var newItems: [Item] = []
@@ -135,11 +136,15 @@ class ListTableViewController: UITableViewController {
             let item = Item(word: text!,
                             addedByUser: self.user.email,
                             meaning: meaningField!,
-                            completed: false)
+                            completed: false,
+                            starCount: 0,
+                            uid: self.user.uid)
             if alert.textFields?.first?.text != "" {
-                let itemRef = self.word.child((text?.lowercased())!)
-                                        
+                let wordUi = UUID().uuidString
+                let itemRef = self.word.child(wordUi)
+                let userItem = self.userWord.child(self.user.uid + "/" + wordUi)
                 itemRef.setValue(item.toAnyObject())
+                userItem.setValue(item.toAnyObject())
             }
         }
         
