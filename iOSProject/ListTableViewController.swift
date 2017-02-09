@@ -54,7 +54,7 @@ class ListTableViewController: UITableViewController {
         userCountBarButtonItem.tintColor = UIColor.white
         navigationItem.leftBarButtonItem = userCountBarButtonItem
         
-        user = User(id: "ASDF45GG", uid: "FakeId", email: "hungry@person.food")
+        user = User(uid: "FakeId", email: "hungry@person.food")
         
         word.queryOrdered(byChild: "completed").observe(.value, with: { snapshot in
             var newItems: [Item] = []
